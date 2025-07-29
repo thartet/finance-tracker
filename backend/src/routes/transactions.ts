@@ -79,25 +79,4 @@ router.get("/transactions/stats", async (req, res) => {
     res.json(result);
   });  
 
-// POST /api/recurring-expenses
-router.post('/recurring-expenses', async (req, res) => {
-  const { description, amount, interval, startDate, endDate } = req.body;
-  
-  if (!amount || !interval || !startDate) {
-    return res.status(400).json({ error: "Champs obligatoires manquants" });
-  }
-
-  const recurring = await prisma.recurringExpense.create({
-    data: {
-      description,
-      amount: parseFloat(amount),
-      interval,
-      startDate: new Date(startDate),
-      endDate: endDate ? new Date(endDate) : null,
-    },
-  });
-
-  res.json(recurring);
-});
-
 export default router;

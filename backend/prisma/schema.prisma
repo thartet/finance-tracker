@@ -19,16 +19,10 @@ model Transaction {
   amount    Float
   date      DateTime @default(now())
   category  String
-  recurringId Int?       // FK vers RecurringExpense si dépense générée automatiquement
-  recurring   RecurringExpense? @relation(fields: [recurringId], references: [id])
 }
 
-model RecurringExpense {
-  id          Int      @id @default(autoincrement())
-  amount      Float
-  description String?
-  interval    String   // "monthly", "weekly", "yearly"
-  startDate   DateTime
-  endDate     DateTime?
-  expenses    Transaction[]
+model BalanceSetting {
+  id        Int    @id @default(autoincrement())
+  initial   Float  // solde initial
+  createdAt DateTime @default(now())
 }
