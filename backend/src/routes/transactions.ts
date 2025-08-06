@@ -79,4 +79,30 @@ router.get("/transactions/stats", async (req, res) => {
     res.json(result);
   });  
 
+// PUT /api/transactions/:id
+router.put("/transactions/:id", async (req, res) => {
+  const id = parseInt(req.params.id);
+  const { label, amount, date, category } = req.body;
+
+  if (!label || !amount || !date || !category || isNaN(id)) {
+    return res.status(400).json({ error: "Champs manquants ou ID invalide" });
+  }
+
+  try {
+    const updatedTx = await prisma.transaction.update({
+      where: { id },
+      data: {
+        label,
+        amount: parseFloat(amount),
+        date: new Date(date),
+        category,
+      },
+    });
+    res.json(updatedTx);
+  } catch (error) {
+    console.error("Erreur mise à jour :", error);
+    res.status(500).json({ error: "Erreur lors de la mise à jour" });
+  }
+});
+
 export default router;
